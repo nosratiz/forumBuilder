@@ -38,8 +38,7 @@ namespace FourmBuilder.Api.Core.Validator.Auth
                 .NotNull().NotEmpty()
                 .MinimumLength(6).MaximumLength(20);
 
-            RuleFor(dto => dto.StudentNumber)
-                .NotEmpty().NotNull().MinimumLength(9).MaximumLength(9);
+            RuleFor(dto => dto.StudentNumber).NotEmpty().NotNull();
 
             RuleFor(dto => dto.UserType).NotEmpty().NotNull();
 

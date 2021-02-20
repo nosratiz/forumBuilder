@@ -27,23 +27,26 @@ namespace FourmBuilder.Api.Core.Validator.Users
             RuleFor(dto => dto.Password)
                 .NotEmpty()
                 .MinimumLength(6);
-
+            
+          
             RuleFor(dto => dto.Email)
-                .NotEmpty()
-                .EmailAddress().WithMessage(ResponseMessage.InvalidEmailFormat);
+                .NotEmpty().NotNull().EmailAddress().MaximumLength(50)
+                .MustAsync(ValidEmailAddress).WithMessage(ResponseMessage.EmailAlreadyExist);
 
-            RuleFor(dto => dto.Mobile)
-                .NotEmpty()
-                .NotNull();
+
+            RuleFor(dto => dto.StudentNumber)
+                .NotEmpty().NotNull();
+
+            RuleFor(dto => dto.UserType).NotEmpty().NotNull();
+
 
             RuleFor(dto => dto).MustAsync(ValidMobile)
-                .WithMessage(ResponseMessage.MobileAlreadyExist)
-                .MustAsync(ValidEmailAddress).WithMessage(ResponseMessage.EmailAlreadyExist);
+                .WithMessage(ResponseMessage.MobileAlreadyExist);
         }
 
 
-        private async Task<bool> ValidEmailAddress(CreateUserCommand createUserCommand, CancellationToken cancellationToken)
-        => !await _userRepository.ExistsAsync(x => x.Email == createUserCommand.Email && x.IsDelete == false, cancellationToken);
+        private async Task<bool> ValidEmailAddress(string email, CancellationToken cancellationToken)
+        => !await _userRepository.ExistsAsync(x => x.Email == email && x.IsDelete == false, cancellationToken);
 
 
         private async Task<bool> ValidMobile(CreateUserCommand createUserCommand, CancellationToken cancellationToken)

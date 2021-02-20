@@ -115,5 +115,11 @@
 
         public static string MobileNumberNotValid = "شماره موبایل 10 رقمی می باشد";
 
+        public static string ForumNotFound = "فرم مورد نظر شما پیدا نشد";
+
+        public static string DeleteAccessDenied = "اجازه حذف فایل وجود ندارد";
+
+        public static string QuestionNotFound = "سوال شما پیدا نشد";
+
     }
 }

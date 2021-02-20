@@ -11,7 +11,9 @@ namespace FourmBuilder.Api.Core.Configuration
             services.AddMongoRepository<User>("Users");
             services.AddMongoRepository<Role>("Roles");
             services.AddMongoRepository<UserToken>("UserTokens");
-        
+            services.AddMongoRepository<Forum>("Forums");
+            services.AddMongoRepository<UserFile>("UserFiles");
+
             return services;
         }
     }

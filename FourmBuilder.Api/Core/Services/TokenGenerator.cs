@@ -23,7 +23,8 @@ namespace FourmBuilder.Api.Core.Services
         private readonly IMongoRepository<UserToken> _userTokenRepository;
         private readonly IRequestMeta _requestMeta;
 
-        public TokenGenerator(IOptions<JwtSetting> jwtSettings, IRequestMeta requestMeta, IMongoRepository<UserToken> userTokenRepository)
+        public TokenGenerator(IOptions<JwtSetting> jwtSettings, IRequestMeta requestMeta,
+            IMongoRepository<UserToken> userTokenRepository)
         {
             _requestMeta = requestMeta;
             _userTokenRepository = userTokenRepository;
@@ -39,10 +40,11 @@ namespace FourmBuilder.Api.Core.Services
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("Id", user.Id.ToString()),
-                new Claim("fullName",$"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType,user.Role.Name)
+                new Claim("fullName", $"{user.FirstName} {user.LastName}"),
+                new Claim("RoleName", user.Role.Name),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
             };
-            
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

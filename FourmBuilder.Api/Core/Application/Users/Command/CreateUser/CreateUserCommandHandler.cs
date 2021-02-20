@@ -17,7 +17,6 @@ namespace FourmBuilder.Api.Core.Application.Users.Command.CreateUser
         private readonly IMongoRepository<Role> _roleRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
-    
 
 
         public CreateUserCommandHandler(IMongoRepository<User> userRepository, IMapper mapper,
@@ -31,17 +30,15 @@ namespace FourmBuilder.Api.Core.Application.Users.Command.CreateUser
 
         public async Task<Result<UserDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var currentUser = await _userRepository.GetAsync(u => u.Id == Guid.Parse(_currentUserService.UserId),
-                cancellationToken);
-            
-
             var user = _mapper.Map<User>(request);
-        
-            var role = await _roleRepository.GetAsync(x => x.Name == Role.User, cancellationToken);
 
+            var roleName = request.IsAdmin ? Role.Admin : Role.User;
+
+            var role = await _roleRepository.GetAsync(x => x.Name == roleName, cancellationToken);
+
+            user.Role = role;
 
             await _userRepository.AddAsync(user);
-            
 
 
             return Result<UserDto>.SuccessFul(_mapper.Map<UserDto>(user));

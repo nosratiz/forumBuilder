@@ -19,24 +19,32 @@ namespace FourmBuilder.Api.Core.Validator.Users
             RuleFor(dto => dto.Id).NotEmpty();
 
             RuleFor(dto => dto.FirstName)
-                .NotEmpty()
+                .NotEmpty().NotNull()
                 .MinimumLength(2);
 
             RuleFor(dto => dto.LastName)
-                .NotEmpty()
+                .NotEmpty().NotNull()
                 .MinimumLength(2);
 
+            RuleFor(dto => dto.Password)
+                .NotEmpty()
+                .MinimumLength(6);
+            
+          
             RuleFor(dto => dto.Email)
-                .NotEmpty()
-                .EmailAddress();
+                .NotEmpty().NotNull().EmailAddress().MaximumLength(50);
+            
 
-            RuleFor(dto => dto.Mobile)
-                .NotEmpty()
-                .NotNull();
+            RuleFor(dto => dto.StudentNumber)
+                .NotEmpty().NotNull();
 
-            RuleFor(dto => dto.RoleId)
-                .NotEmpty();
+            RuleFor(dto => dto.UserType).NotEmpty().NotNull();
 
+
+            RuleFor(dto => dto).MustAsync(ValidMobile)
+                .WithMessage(ResponseMessage.MobileAlreadyExist);
+
+      
             RuleFor(dto => dto)
                 .MustAsync(ValidMobile)
                 .WithMessage(ResponseMessage.MobileAlreadyExist)

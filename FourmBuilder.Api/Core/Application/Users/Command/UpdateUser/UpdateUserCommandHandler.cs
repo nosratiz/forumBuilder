@@ -27,12 +27,7 @@ namespace FourmBuilder.Api.Core.Application.Users.Command.UpdateUser
         public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             #region Validation
-
-            var role = await _roleRepository.GetAsync(request.RoleId, cancellationToken);
-
-            if (role is null)
-                return Result.Failed(new BadRequestObjectResult(new ApiMessage(ResponseMessage.RoleNotFound)));
-
+            
             var user = await _userRepository.GetAsync(request.Id, cancellationToken);
 
             if (user is null)
