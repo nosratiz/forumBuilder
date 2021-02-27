@@ -28,14 +28,14 @@ namespace FourmBuilder.Api.Core.AutoMapper
             CreateMap<User, UserDto>()
                 .ForMember(x => x.RoleName, opt => opt.MapFrom(des => des.Role.Name));
 
-         
+
             CreateMap<CreateUserCommand, User>()
                 .ForMember(src => src.IsMobileConfirm, opt => opt.MapFrom(des => !string.IsNullOrWhiteSpace(des.Mobile)))
                 .ForMember(src => src.IsEmailConfirm, opt => opt.MapFrom(des => true))
                 .ForMember(src => src.Password, opt => opt.MapFrom(des => PasswordManagement.HashPass(des.Password)))
                 .ForMember(src => src.ActiveCode, opt => opt.MapFrom(des => new Random().Next(10000, 99999).ToString()))
                 .ForMember(src => src.ModifiedDate, opt => opt.MapFrom(des => DateTime.Now))
-                .ForMember(src => src.RegisterDate, opt => opt.MapFrom(des => DateTime.Now))                
+                .ForMember(src => src.RegisterDate, opt => opt.MapFrom(des => DateTime.Now))
                 .ForMember(src => src.ExpiredCode, opt => opt.MapFrom(des => DateTime.Now.AddDays(2)));
 
             CreateMap<UpdateUserCommand, User>()
@@ -45,7 +45,9 @@ namespace FourmBuilder.Api.Core.AutoMapper
             CreateMap<PagedResult<User>, PagedResult<UserDto>>();
 
 
-            CreateMap<RegisterCommand, User>().ForMember(x => x.Password,
+            CreateMap<RegisterCommand, User>().ForMember(x => x.IsEmailConfirm, opt => opt.MapFrom(des => true))
+            .ForMember(x => x.IsMobileConfirm, opt => opt.MapFrom(des => true))
+            .ForMember(x => x.Password,
                     opt => opt.MapFrom(des => PasswordManagement.HashPass(des.Password)))
                .ForMember(x => x.ExpiredCode, opt => opt.MapFrom(des => DateTime.Now.AddMinutes(215)))
                 .ForMember(src => src.ActiveCode, opt => opt.MapFrom(des => new Random().Next(10000, 99999).ToString()))
@@ -69,7 +71,7 @@ namespace FourmBuilder.Api.Core.AutoMapper
             #region Forum
 
             CreateMap<PagedResult<Forum>, PagedResult<ForumListDto>>();
-            
+
             CreateMap<Forum, ForumListDto>();
             CreateMap<Forum, ForumDto>();
 
@@ -89,7 +91,7 @@ namespace FourmBuilder.Api.Core.AutoMapper
             #region Question
 
             CreateMap<CreateQuestionCommand, ForumQuestion>()
-                .ForMember(x=>x.Id,opt=>opt.MapFrom(des=>Guid.NewGuid()));
+                .ForMember(x => x.Id, opt => opt.MapFrom(des => Guid.NewGuid()));
 
             CreateMap<UpdateQuestionCommand, ForumQuestion>();
 

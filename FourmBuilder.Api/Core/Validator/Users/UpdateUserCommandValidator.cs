@@ -25,10 +25,6 @@ namespace FourmBuilder.Api.Core.Validator.Users
             RuleFor(dto => dto.LastName)
                 .NotEmpty().NotNull()
                 .MinimumLength(2);
-
-            RuleFor(dto => dto.Password)
-                .NotEmpty()
-                .MinimumLength(6);
             
           
             RuleFor(dto => dto.Email)

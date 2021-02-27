@@ -34,12 +34,7 @@ namespace FourmBuilder.Api.Core.Application.Auth.Command.LoginCommand
 
             if (PasswordManagement.CheckPassword(request.Password, user.Password) == false)
                 return Result<TokenDto>.Failed(
-                    new BadRequestObjectResult(new ApiMessage(ResponseMessage.InvalidUserNameOrPassword)));
-
-            if (user.IsMobileConfirm == false)
-                return Result<TokenDto>.Failed(
-                    new BadRequestObjectResult(new ApiMessage(ResponseMessage.AccountDeactivate)));
-            
+                    new BadRequestObjectResult(new ApiMessage(ResponseMessage.InvalidUserNameOrPassword)));            
 
             var result = await _tokenGenerator.Generate(user, cancellationToken);
 

@@ -30,7 +30,7 @@ namespace FourmBuilder.Api.Core.Application.Users.Command.DeleteUser
                 return Result.Failed(
                     new NotFoundObjectResult(new ApiMessage(ResponseMessage.UserNotFound)));
 
-            if (user.Role.Name != Role.Admin)
+            if (user.Role.Name == Role.Admin)
                 return Result.Failed(
                     new BadRequestObjectResult(new ApiMessage(ResponseMessage.DeleteUserAdminNotAllowed)));
 
