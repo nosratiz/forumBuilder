@@ -28,7 +28,8 @@ namespace FourmBuilder.Api.Core.Application.Files.Command
         private readonly ICurrentUserService _currentUserService;
         private readonly IWebHostEnvironment _env;
 
-        public CreateFileCommandHandler(IMongoRepository<UserFile> fileRepository, IMapper mapper, ICurrentUserService currentUserService, IWebHostEnvironment env)
+        public CreateFileCommandHandler(IMongoRepository<UserFile> fileRepository, IMapper mapper,
+            ICurrentUserService currentUserService, IWebHostEnvironment env)
         {
             _fileRepository = fileRepository;
             _mapper = mapper;
@@ -41,7 +42,7 @@ namespace FourmBuilder.Api.Core.Application.Files.Command
             var tempPath = Path.Combine(ApplicationStaticPath.Documents, request.Files.FileName);
             var fileName = Path.GetFileNameWithoutExtension(tempPath);
             var extension = Path.GetExtension(tempPath);
-            var newName = $"{_currentUserService.FullName}-{ Guid.NewGuid():N}{extension}";
+            var newName =  $"{Guid.NewGuid():N}{extension}";
             var filePath = Path.Combine(_env.ContentRootPath, ApplicationStaticPath.Documents, newName);
 
             #region Save To File
@@ -49,7 +50,6 @@ namespace FourmBuilder.Api.Core.Application.Files.Command
             await using var fileStream = new FileStream(filePath, FileMode.Create);
 
             await request.Files.CopyToAsync(fileStream, cancellationToken);
-
 
             #endregion
 
@@ -63,17 +63,15 @@ namespace FourmBuilder.Api.Core.Application.Files.Command
                 Url = $"{ApplicationStaticPath.Clients.Document}/{newName}",
                 MediaType = request.Files.ContentType,
                 Path = $"/{ApplicationStaticPath.Documents}{newName}",
-                UserId = Guid.Parse(_currentUserService.UserId),
+                UserId = _currentUserService.IsAuthenticated ? Guid.Parse(_currentUserService.UserId) : Guid.NewGuid(),
                 CreateDate = DateTime.Now
             };
 
             await _fileRepository.AddAsync(userFile);
 
-
             #endregion
 
             return Result<FileDto>.SuccessFul(_mapper.Map<FileDto>(userFile));
-
         }
     }
 }

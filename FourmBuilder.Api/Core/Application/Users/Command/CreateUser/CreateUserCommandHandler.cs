@@ -31,7 +31,7 @@ namespace FourmBuilder.Api.Core.Application.Users.Command.CreateUser
         public async Task<Result<UserDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var user = _mapper.Map<User>(request);
-
+            
             var roleName = request.IsAdmin ? Role.Admin : Role.User;
 
             var role = await _roleRepository.GetAsync(x => x.Name == roleName, cancellationToken);

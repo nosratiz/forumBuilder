@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FourmBuilder.Api.Controllers
 {
-
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FileController : BaseController
     {
         /// <summary>
@@ -29,6 +27,7 @@ namespace FourmBuilder.Api.Controllers
         [ProducesErrorResponseType(typeof(ApiMessage))]
         [HttpPost("Upload")]
         [Consumes("multipart/form-data")]
+        
         public async Task<IActionResult> Upload([FromForm]CreateFileCommand createFileCommand)
         {
             var result = await Mediator.Send(createFileCommand);

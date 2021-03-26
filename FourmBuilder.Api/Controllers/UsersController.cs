@@ -69,6 +69,21 @@ namespace FourmBuilder.Api.Controllers
         }
 
 
+        [HttpGet("{id}/ForumList")]
+        public async Task<IActionResult> GetForum(Guid id,[FromQuery] PagingOptions pagingOptions)
+        {
+            var result = await Mediator.Send(new GetUserForumPagedListQuery
+            {
+                UserId = id,
+                Page = pagingOptions.Page,
+                Limit = pagingOptions.Limit,
+                Query = pagingOptions.Query
+            });
+
+            return result.ApiResult;
+        }
+
+
 
     }
 }

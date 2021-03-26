@@ -12,7 +12,8 @@ namespace FourmBuilder.Api.Core.Validator.Auth
 
             RuleFor(dto => dto.Email)
                 .NotEmpty()
-                .NotNull();
+                .NotNull()
+                .EmailAddress();
 
             RuleFor(dto => dto.Password).NotNull().NotEmpty();
         }
