@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FourmBuilder.Api.Core.Application.Files.Command;
 using FourmBuilder.Common.Helper.systemMessage;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourmBuilder.Api.Controllers

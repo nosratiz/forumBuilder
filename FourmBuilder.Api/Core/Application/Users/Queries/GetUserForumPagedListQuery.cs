@@ -15,13 +15,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FourmBuilder.Api.Core.Application.Users.Queries
 {
-    public class GetUserForumPagedListQuery : PagingOptions, IRequest<Result<PagedResult<ForumDto>>>
+    public class GetUserForumPagedListQuery : PagingOptions, IRequest<Result<PagedResult<ForumListDto>>>
     {
         public Guid UserId { get; set; }
     }
 
     public class
-        GetUserForumPagedListQueryHandler : IRequestHandler<GetUserForumPagedListQuery, Result<PagedResult<ForumDto>>>
+        GetUserForumPagedListQueryHandler : IRequestHandler<GetUserForumPagedListQuery, Result<PagedResult<ForumListDto>>>
     {
         private readonly IMongoRepository<User> _userRepository;
         private readonly IMongoRepository<Forum> _forumRepository;
@@ -35,14 +35,14 @@ namespace FourmBuilder.Api.Core.Application.Users.Queries
             _mapper = mapper;
         }
 
-        public async Task<Result<PagedResult<ForumDto>>> Handle(GetUserForumPagedListQuery request,
+        public async Task<Result<PagedResult<ForumListDto>>> Handle(GetUserForumPagedListQuery request,
             CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetAsync(request.UserId, cancellationToken);
 
             if (user is null)
             {
-                return Result<PagedResult<ForumDto>>.Failed(
+                return Result<PagedResult<ForumListDto>>.Failed(
                     new BadRequestObjectResult(new ApiMessage(ResponseMessage.UserNotFound)));
             }
 
@@ -53,8 +53,8 @@ namespace FourmBuilder.Api.Core.Application.Users.Queries
 
             var forumList = await _forumRepository.BrowseAsync(forums, request);
 
-            return Result<PagedResult<ForumDto>>
-                .SuccessFul(_mapper.Map<PagedResult<ForumDto>>(forumList));
+            return Result<PagedResult<ForumListDto>>
+                .SuccessFul(_mapper.Map<PagedResult<ForumListDto>>(forumList));
         }
     }
 }
