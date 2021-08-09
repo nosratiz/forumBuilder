@@ -18,6 +18,8 @@ namespace FourmBuilder.Api.Core.Application.Forums.Dto
         public Guid UserId { get; set; }
 
         public bool IsActive { get; set; }
+        
+        public bool IsPublic { get; set; }
 
         public string Link { get; set; }
 

@@ -14,11 +14,12 @@ namespace FourmBuilder.Api.Core.Models
         public string Title { get; set; }
 
         public string Description { get; set; }
-
         public Guid UserId { get; set; }
 
         public bool IsActive { get; set; }
 
+        public bool IsPublic { get; set; }
+      
         public string Link { get; set; }
 
         public DateTime CreateDate { get; set; }

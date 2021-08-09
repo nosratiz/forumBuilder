@@ -121,5 +121,9 @@
 
         public static string QuestionNotFound = "سوال شما پیدا نشد";
 
+        public static string FormIsDeactivate = "فرم غیر فعال شده است و دیگر قابل دسترسی نیست";
+
+        public static string NeedAuthentication = "فرم پاسخگویی خصوصی می باشد و برای پاسخگویی نیاز به لاگین می باشد";
+
     }
 }

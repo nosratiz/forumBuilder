@@ -70,7 +70,7 @@ namespace FourmBuilder.Api.Core.Excel
 
                 return $"{ApplicationStaticPath.Clients.Document}/{uniqueName}";
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }
