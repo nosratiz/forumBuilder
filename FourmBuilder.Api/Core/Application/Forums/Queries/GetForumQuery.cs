@@ -13,18 +13,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FourmBuilder.Api.Core.Application.Forums.Queries
 {
-    public class GetForumInfoQuery : IRequest<Result<ForumDto>>
+    public class GetForumQuery : IRequest<Result<ForumDto>>
     {
         public Guid Id { get; set; }
     }
 
-    public class GetForumInfoQueryHandler : IRequestHandler<GetForumInfoQuery, Result<ForumDto>>
+    public class GetForumQueryHandler : IRequestHandler<GetForumQuery, Result<ForumDto>>
     {
         private readonly IMongoRepository<Forum> _forumRepository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetForumInfoQueryHandler(IMongoRepository<Forum> forumRepository, IMapper mapper,
+        public GetForumQueryHandler(IMongoRepository<Forum> forumRepository, IMapper mapper,
             ICurrentUserService currentUserService)
         {
             _forumRepository = forumRepository;
@@ -32,24 +32,14 @@ namespace FourmBuilder.Api.Core.Application.Forums.Queries
             _currentUserService = currentUserService;
         }
 
-        public async Task<Result<ForumDto>> Handle(GetForumInfoQuery request, CancellationToken cancellationToken)
+
+        public async Task<Result<ForumDto>> Handle(GetForumQuery request, CancellationToken cancellationToken)
         {
             var fourm = await _forumRepository.GetAsync(request.Id, cancellationToken);
 
             if (fourm is null)
                 return Result<ForumDto>.Failed(
                     new BadRequestObjectResult(new ApiMessage(ResponseMessage.ForumNotFound)));
-
-            if (fourm.IsActive == false)
-            {
-                return Result<ForumDto>.Failed(new BadRequestObjectResult(new ApiMessage(ResponseMessage.FormIsDeactivate)));
-            }
-
-            if (fourm.IsPublic == false && _currentUserService.IsAuthenticated == false)
-            {
-                return Result<ForumDto>.Failed(
-                    new BadRequestObjectResult(new ApiMessage(ResponseMessage.NeedAuthentication)));
-            }
 
             return Result<ForumDto>.SuccessFul(_mapper.Map<ForumDto>(fourm));
         }

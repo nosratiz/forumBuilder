@@ -30,7 +30,16 @@ namespace FourmBuilder.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetInfo(Guid id)
         {
-            var result = await Mediator.Send(new GetForumInfoQuery {Id = id});
+            var result = await Mediator.Send(new GetForumInfoQuery { Id = id });
+
+            return result.ApiResult;
+        }
+
+
+        [HttpGet("{id}/manager")]
+        public async Task<IActionResult> GetForumInfo(Guid id)
+        {
+            var result = await Mediator.Send(new GetForumQuery() { Id = id });
 
             return result.ApiResult;
         }
@@ -43,7 +52,7 @@ namespace FourmBuilder.Api.Controllers
             if (result.Success == false)
                 return result.ApiResult;
 
-            return Created(Url.Link("GetForumInfo", new {id = result.Data.Id}), result.Data);
+            return Created(Url.Link("GetForumInfo", new { id = result.Data.Id }), result.Data);
         }
 
 
@@ -62,7 +71,7 @@ namespace FourmBuilder.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await Mediator.Send(new DeleteForumCommand {Id = id});
+            var result = await Mediator.Send(new DeleteForumCommand { Id = id });
 
             if (result.Success == false)
                 return result.ApiResult;
@@ -73,25 +82,26 @@ namespace FourmBuilder.Api.Controllers
 
         [HttpGet("ForumAnswerCount/{id}")]
         public async Task<IActionResult> GetAnswerCount(Guid id, CancellationToken cancellationToken)
-            => Ok(new {count = await Mediator.Send(new GetForumAnswerCountQuery {ForumId = id}, cancellationToken)});
+            => Ok(new
+            {
+                count = await Mediator.Send(new GetForumAnswerCountQuery { ForumId = id }, cancellationToken)
+            });
 
 
         [HttpGet("ExcelReport/{id}")]
         public async Task<IActionResult> GetExcelReport(Guid id, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(new GetForumInfoQuery {Id = id}, cancellationToken);
+            var result = await Mediator.Send(new GetForumInfoQuery { Id = id }, cancellationToken);
 
             if (result.Success == false)
                 return result.ApiResult;
 
-            var UserResponse = await Mediator.Send(new GetUserResponseListQuery {ForumId = id}, cancellationToken);
+            var UserResponse = await Mediator.Send(new GetUserResponseListQuery { ForumId = id }, cancellationToken);
 
             var url = ReportGenerator.GenerateForumAnswers(UserResponse, result.Data
                 .ForumQuestions.Select(x => x.Question).ToList());
 
-            return Ok(new {link = url});
+            return Ok(new { link = url });
         }
-        
-        
     }
 }
