@@ -30,7 +30,8 @@ namespace FourmBuilder.Api.Core.Application.Forums.Command.DeleteForums
             if (fourm is null)
                 return Result.Failed(new BadRequestObjectResult(new ApiMessage(ResponseMessage.ForumNotFound)));
 
-            if (fourm.UserId != Guid.Parse(_currentUserService.UserId) || _currentUserService.RoleName != Role.Admin)
+            if ((fourm.UserId != Guid.Parse(_currentUserService.UserId) ||
+                 _currentUserService.RoleName != Role.Admin) == false)
                 return Result.Failed(new BadRequestObjectResult(new ApiMessage(ResponseMessage.DeleteAccessDenied)));
 
             await _forumRepository.DeleteAsync(fourm.Id);
