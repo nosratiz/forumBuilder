@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FourmBuilder.Api.Core.Answers.Dto
+namespace FourmBuilder.Api.Core.Application.Answers.Dto
 {
     public class QuestionAnswersDto
     {

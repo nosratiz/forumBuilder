@@ -79,7 +79,7 @@ namespace FourmBuilder.Api.Core.AutoMapper
 
             CreateMap<ForumOptions, ForumOptionsDto>();
 
-            CreateMap<CreateForumCommand, Forum>()
+            CreateMap<CreateForumCommand, Forum>().ForMember(x=>x.IsActive,opt=>opt.MapFrom(des=>true))
                 .ForMember(x => x.CreateDate, opt => opt.MapFrom(des => DateTime.Now));
 
             CreateMap<UpdateForumCommand, Forum>();

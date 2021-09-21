@@ -16,6 +16,5 @@ namespace FourmBuilder.Api.Core.Application.Forums.Command.UpdateForums
         
         public bool IsPublic { get; set; }
         
-        public bool IsActive { get; set; }
     }
 }

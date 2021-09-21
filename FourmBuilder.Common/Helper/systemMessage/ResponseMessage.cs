@@ -125,5 +125,7 @@
 
         public static string NeedAuthentication = "فرم پاسخگویی خصوصی می باشد و برای پاسخگویی نیاز به لاگین می باشد";
 
+        public static string AllRequiredQuestionMustBeAnswered = "تمامی سوال های که پاسخشان اجباری است باید پاسخ داده شوند";
+
     }
 }

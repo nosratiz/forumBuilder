@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FourmBuilder.Api.Core.Answers.Dto;
+using FourmBuilder.Api.Core.Application.Answers.Dto;
 using FourmBuilder.Common.Result;
 using MediatR;
 

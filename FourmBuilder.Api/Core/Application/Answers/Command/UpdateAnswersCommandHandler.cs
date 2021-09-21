@@ -36,11 +36,46 @@ namespace FourmBuilder.Api.Core.Application.Answers.Command
             if (forum is null)
                 return Result.Failed(new BadRequestObjectResult(new ApiMessage(ResponseMessage.ForumNotFound)));
 
+            var RequiredIds = forum.ForumQuestions
+                .Where(x => x.IsRequired)
+                .Select(x => x.Id).ToList();
+
+            if (RequiredIds.Any())
+            {
+                var ids = RequiredIds.Except(request.QuestionAnswers
+                        .Select(x => x.QuestionId))
+                    .ToList();
+
+                if (ids.Any())
+                {
+                    return Result.Failed(
+                        new BadRequestObjectResult(new ApiMessage(ResponseMessage.AllRequiredQuestionMustBeAnswered)));
+                }
+
+                var answers = request.QuestionAnswers
+                    .Where(x => RequiredIds.Contains(x.QuestionId))
+                    .Select(x => x.Answers)
+                    .ToList();
+
+                foreach (var answer in answers)
+                {
+                    if (string.IsNullOrWhiteSpace(answer))
+                    {
+                        return Result.Failed(
+                            new BadRequestObjectResult(new ApiMessage(ResponseMessage.AllRequiredQuestionMustBeAnswered)));
+                    }
+                }
+        
+            }
+
+        
+
             User user = null;
             if (_currentUser.IsAuthenticated)
             {
                 user = await _userRepository.GetAsync(Guid.Parse(_currentUser.UserId), cancellationToken);
             }
+
 
             foreach (var questionAnswers in request.QuestionAnswers)
             {

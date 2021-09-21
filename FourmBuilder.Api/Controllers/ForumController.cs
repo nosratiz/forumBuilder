@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FourmBuilder.Api.Core.Answers.Queries;
+using FourmBuilder.Api.Core.Application.Forums.Command.Activation;
 using FourmBuilder.Api.Core.Application.Forums.Command.CreatForums;
 using FourmBuilder.Api.Core.Application.Forums.Command.DeleteForums;
 using FourmBuilder.Api.Core.Application.Forums.Command.UpdateForums;
@@ -102,6 +103,20 @@ namespace FourmBuilder.Api.Controllers
                 .ForumQuestions.Select(x => x.Question).ToList());
 
             return Ok(new { link = url });
+        }
+
+
+        [HttpPut("{id}/activation")]
+        public async Task<IActionResult> Activation(Guid id, CancellationToken cancellationToken)
+        {
+            var result = await Mediator.Send(new ActivationForumCommand { Id = id }, cancellationToken);
+
+            if (result.Success==false)
+            {
+                return result.ApiResult;
+            }
+
+            return NoContent();
         }
     }
 }

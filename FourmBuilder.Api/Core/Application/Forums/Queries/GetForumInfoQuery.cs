@@ -48,7 +48,7 @@ namespace FourmBuilder.Api.Core.Application.Forums.Queries
             if (fourm.IsPublic == false && _currentUserService.IsAuthenticated == false)
             {
                 return Result<ForumDto>.Failed(
-                    new BadRequestObjectResult(new ApiMessage(ResponseMessage.NeedAuthentication)));
+                    new UnauthorizedObjectResult(new ApiMessage(ResponseMessage.NeedAuthentication)));
             }
 
             return Result<ForumDto>.SuccessFul(_mapper.Map<ForumDto>(fourm));
